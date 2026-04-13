@@ -5,7 +5,7 @@ from app.config import FB_APP_ID, FB_APP_SECRET
 
 router = APIRouter()
 
-REDIRECT_URI = "http://localhost:8000/auth/callback"
+REDIRECT_URI = "https://facebook-leads-whatsapp-production.up.railway.app/auth/callback"
 
 @router.get("/auth/login")
 async def facebook_login():
@@ -17,7 +17,6 @@ async def facebook_login():
         f"&scope=public_profile"
     )
     return RedirectResponse(url=fb_auth_url)
-
 
 @router.get("/auth/callback")
 async def facebook_callback(code: str = None, error: str = None):
@@ -47,6 +46,6 @@ async def facebook_callback(code: str = None, error: str = None):
         access_token = token_data["access_token"]
         print(f"✅ Token obtenido: {access_token[:20]}...")
         # Redirigir al Flow Builder con éxito
-        return RedirectResponse(url="/?connected=true")
+        return RedirectResponse(url="/?connected=true", status_code=302)
     else:
         return {"error": "No se pudo obtener el token", "details": token_data}
